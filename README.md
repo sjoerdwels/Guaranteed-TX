@@ -10,6 +10,8 @@ The graphic interface provides some features to modify the simulation, however, 
 
 For building the Smart-Shard Visualiser the source code needs to be available on the build system and Golang version >1.4+. Smart-Shard uses Go bindings for nuklear.h — a small ANSI C gui library and requires a GNU Compiler Collection to build nuklear. Windows users can use MinGW. An extended installation description for nuklear can be found in the [Nuklear Go binding](https://github.com/golang-ui/nuklear) repository.
 
+Subsequently, one can compile the code with `go build`.
+
 ## About Smart-Shard
 Smart-shard exist of two parts:
 1. A reliable messaging protocol for Ethereum 2.0.
