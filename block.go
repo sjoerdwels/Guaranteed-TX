@@ -49,8 +49,11 @@ func (chainBlock *ChainBlock) updateConsistency(txOutList []*Transaction) {
 	for _, txIn := range chainBlock.block.TXIn {
 
 		if !RemoveTxFromList(txIn, &txOutList) {
-			chainBlock.invalidateBlock()
-			return
+			//  Only invalidate blocks which are not final
+			if !chainBlock.finalised {
+				chainBlock.invalidateBlock()
+				return
+			}
 		}
 	}
 

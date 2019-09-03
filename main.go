@@ -18,9 +18,9 @@ const (
 
 // Periods in seconds
 // Probability as float
-var FinalisationPeriod = BoundedRange{8, 10}
+var FinalisationPeriod = BoundedRange{3, 5}
 
-const FinalisationProbability = 0.5
+const FinalisationProbability = .8
 
 var BlockGenerationPeriod = BoundedRange{1, 3}
 var BlockTxInNumber = BoundedRange{1, 4}
@@ -63,6 +63,7 @@ func main() {
 
 	// Create beacon
 	beacon := Beacon{channels: &channels}
+	beacon.init()
 	go beacon.run()
 
 	// Create shards

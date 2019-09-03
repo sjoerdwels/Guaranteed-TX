@@ -90,7 +90,7 @@ func (shard *Shard) run() {
 
 func (shard *Shard) receiveBlock(block *Block) {
 
-	shard.Println("Received block.")
+	shard.Println(fmt.Sprintf("Received block from  %d.",  block.Shard))
 
 	// Add block
 	shard.chains[block.Shard].Insert(block)
@@ -119,9 +119,11 @@ func (shard *Shard) receiveFinalisation(finalisation *Finalisation) {
 
 		// Prune other shards
 		if shard.id != block.Shard {
-			shard.chains[block.Shard].Prune(block.Hash)
+			//shard.chains[block.Shard].Prune(block.Hash)
 		}
 	}
+
+	shard.finalisation = *finalisation
 
 	// Update BlockTree
 	shard.updateBlockTree()

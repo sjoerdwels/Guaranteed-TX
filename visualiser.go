@@ -20,15 +20,16 @@ const (
 )
 
 var (
-	cTEXT      = nk.NkRgb(185, 185, 185)
-	cLINE      = nk.NkRgb(95, 95, 95)
-	cTXLINE    = nk.NkRgb(255, 255, 255)
-	cGENISIS   = nk.NkRgb(0, 204, 255)
-	cFINALISED = nk.NkRgb(204, 255, 0)
-	cINVALID   = nk.NkRgb(255, 51, 0)
-	cCANONICAL = nk.NkRgb(243, 243, 21)
-	cSTALE     = nk.NkRgb(194, 14, 213)
-	cPRUNED    = nk.NkRgb(95, 95, 95)
+	cTEXT           = nk.NkRgb(185, 185, 185)
+	cLINE           = nk.NkRgb(95, 95, 95)
+	cTXLINE         = nk.NkRgb(255, 255, 255)
+	cGENISIS        = nk.NkRgb(0, 204, 255)
+	cFINALISED      = nk.NkRgb(204, 255, 0)
+	cFINALISEDOTHER = nk.NkRgb(180, 180, 180)
+	cINVALID        = nk.NkRgb(255, 51, 0)
+	cCANONICAL      = nk.NkRgb(243, 243, 21)
+	cSTALE          = nk.NkRgb(194, 14, 213)
+	cPRUNED         = nk.NkRgb(95, 95, 95)
 )
 
 func init() {
@@ -45,7 +46,7 @@ type Visualiser struct {
 	scaleX            float64
 	selectedNode      *ChainBlock
 	selectedNodeChain int
-	selectedTX		  *Transaction
+	selectedTX        *Transaction
 }
 
 type Coordinate struct {
@@ -170,10 +171,9 @@ func initFont(ctx *nk.Context) *nk.UserFont {
 	return nil
 }
 
-
 func (visualiser *Visualiser) drawLayout(win *glfw.Window, ctx *nk.Context) {
 
-	_, height :=  win.GetSize()
+	_, height := win.GetSize()
 	canvas := nk.NkWindowGetCanvas(ctx)
 
 	toolbarHeight := float32(25)
@@ -209,6 +209,13 @@ func (visualiser *Visualiser) drawLayout(win *glfw.Window, ctx *nk.Context) {
 			ProbabilityBuildOnLongestChain = float64(1 - newForkProb)
 		}
 
+		nk.NkLabel(ctx,"Finalise Speed:", nk.TextAlignRight|nk.TextAlignMiddle)
+		newSpeed := nk.NkSlideFloat(ctx, 1, float32(FinalisationPeriod.min), 8, 1)
+		if newSpeed != float32(FinalisationPeriod.min) {
+			FinalisationPeriod.min = int(newSpeed)
+			FinalisationPeriod.max = int(newSpeed) + 2
+		}
+
 	}
 
 	winStartX := paddingX
@@ -221,7 +228,7 @@ func (visualiser *Visualiser) drawLayout(win *glfw.Window, ctx *nk.Context) {
 
 	shard := visualiser.viewShard + 1
 
-	nk.NkLayoutRowTemplateBegin(ctx, float32(height)- 30 - toolbarHeight)
+	nk.NkLayoutRowTemplateBegin(ctx, float32(height)-30-toolbarHeight)
 	nk.NkLayoutRowTemplatePushVariable(ctx, 320)
 	nk.NkLayoutRowTemplatePushStatic(ctx, 210)
 	nk.NkLayoutRowTemplateEnd(ctx)
@@ -288,18 +295,18 @@ func (visualiser *Visualiser) drawBockInspector(ctx *nk.Context) {
 		nk.NkLabelColored(ctx, "Hash:", nk.TextAlignCentered|nk.TextAlignMiddle, cTXLINE)
 		nk.NkLabel(ctx, fmt.Sprintf(" %x", visualiser.selectedNode.block.Hash), nk.TextAlignLeft|nk.TextAlignMiddle)
 
-		nk.NkLabelColored(ctx, "TX - IN:", nk.TextAlignCentered|nk.TextAlignMiddle,cTXLINE)
+		nk.NkLabelColored(ctx, "TX - IN:", nk.TextAlignCentered|nk.TextAlignMiddle, cTXLINE)
 
 		for _, tx := range visualiser.selectedNode.block.TXIn {
-			if nk.NkSelectLabel(ctx, fmt.Sprintf(" %x", tx.Hash), nk.TextAlignLeft|nk.TextAlignMiddle, visualiser.isSelectedTx(tx)) > 0{
+			if nk.NkSelectLabel(ctx, fmt.Sprintf(" %x", tx.Hash), nk.TextAlignLeft|nk.TextAlignMiddle, visualiser.isSelectedTx(tx)) > 0 {
 				visualiser.selectedTX = tx
 			}
 		}
 
-		nk.NkLabelColored(ctx, "TX - OUT:", nk.TextAlignCentered|nk.TextAlignMiddle,cTXLINE)
+		nk.NkLabelColored(ctx, "TX - OUT:", nk.TextAlignCentered|nk.TextAlignMiddle, cTXLINE)
 
 		for _, tx := range visualiser.selectedNode.block.TXOut {
-			if nk.NkSelectLabel(ctx, fmt.Sprintf("%x", tx.Hash), nk.TextAlignLeft|nk.TextAlignMiddle, visualiser.isSelectedTx(tx)) >  0  {
+			if nk.NkSelectLabel(ctx, fmt.Sprintf("%x", tx.Hash), nk.TextAlignLeft|nk.TextAlignMiddle, visualiser.isSelectedTx(tx)) > 0 {
 				visualiser.selectedTX = tx
 			}
 		}
@@ -309,7 +316,7 @@ func (visualiser *Visualiser) drawBockInspector(ctx *nk.Context) {
 }
 
 func (visualiser *Visualiser) isSelectedTx(transaction *Transaction) int32 {
-	if visualiser.selectedTX != nil &&  visualiser.selectedTX.Hash  == transaction.Hash {
+	if visualiser.selectedTX != nil && visualiser.selectedTX.Hash == transaction.Hash {
 		return 1
 	}
 	return 0
@@ -337,7 +344,6 @@ func (visualiser *Visualiser) drawTXInspector(ctx *nk.Context) {
 		nk.NkGroupEnd(ctx)
 	}
 }
-
 
 func (visualiser *Visualiser) drawChain(ctx *nk.Context, canvas *nk.CommandBuffer, shard int, winStartX float32, winStartY float32, width float32, height float32, genisisBlock *ChainBlock) {
 

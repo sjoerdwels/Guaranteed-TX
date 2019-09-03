@@ -35,6 +35,18 @@ func (tx *Transaction) prettyPrint() {
 	fmt.Printf("SourceShard:  %d - TargetShard: %d  -  Data: %s  \n", tx.SourceShard,  tx.TargetShard, tx.Data)
 }
 
+
+// Remove item from list and return
+func ContainsTx(tx *Transaction, txListPointer *[]*Transaction) bool {
+
+	for _, transaction := range *txListPointer {
+		if tx.Hash == transaction.Hash {
+			return true
+		}
+	}
+	return false
+}
+
 // Remove item from list and return
 func RemoveTxFromList(deleteTX *Transaction, txListPointer *[]*Transaction) bool {
 

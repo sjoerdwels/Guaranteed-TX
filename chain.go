@@ -101,6 +101,7 @@ func (chain *Chain) Insert(block *Block) {
 
 // Finalise blocks
 func (chain *Chain) Finalise(hash []byte) {
+
 	chainBlock := chain.Search(hash)
 
 	if chainBlock != nil {
@@ -178,7 +179,7 @@ func (chain *Chain) getTXInList(lastChainBlock *ChainBlock) []*Transaction {
 
 // Get longest three chains
 func (chain *Chain) GetLongestChains(numberOfChains int, validOnly bool) []*ChainBlock {
-	return chain.genesisBlock.getLongestChains(numberOfChains, validOnly)
+	return chain.lastFinalisedBlock.getLongestChains(numberOfChains, validOnly)
 }
 
 // Get longest chains (array of numberOfChain blocks)
@@ -270,8 +271,10 @@ func (chain *Chain) updateVisualisation(isShardChain bool, chainBlock *ChainBloc
 
 	} else {
 
-		if chainBlock.finalised {
-			chainBlock.coordinate.color = cPRUNED
+		if reflect.DeepEqual(chainBlock.block.Hash, chain.lastFinalisedBlock.block.Hash) {
+			chainBlock.coordinate.color = cGENISIS
+		} else if chainBlock.finalised {
+			chainBlock.coordinate.color = cFINALISEDOTHER
 		} else if chain.BlockInLongestChain(chainBlock) {
 			chainBlock.coordinate.color = cCANONICAL
 		} else {
