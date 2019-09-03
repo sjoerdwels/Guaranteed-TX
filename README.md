@@ -5,7 +5,7 @@ The reliable messaging protocol is a cryptoeconomic design in which delaying cro
 
 It was created as a graduation project to visualise a reliable and asynchronous messaging protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
 
-## Compiling Smart-Shard source code
+## Compiling the Smart-Shard source code
 The graphic interface provides some features to modify the simulation, however, many more variables can be modified in the source code. 
 
 For building the Smart-Shard Visualiser the source code needs to be available on the build system and Golang version >1.4+. Smart-Shard uses Go bindings for nuklear.h — a small ANSI C gui library and requires a GNU Compiler Collection to build nuklear. Windows users can use MinGW. An extended installation description for nuklear can be found in the [Nuklear Go binding](https://github.com/golang-ui/nuklear) repository.
