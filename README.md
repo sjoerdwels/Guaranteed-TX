@@ -1,28 +1,22 @@
-# ReliableTX Simulator
+# Guaranteed-TX Simulator
 The ReliableTX simulator is a graphical interface written in Golang to simulate visualise the working of ReliableTX, a reliable messaging protocol for Ethereum 2.0. ReliableTX is a reliable asynchronous messaging protocol that gives rise to low message overhead and computation costs. The reliable messaging protocol is a cryptoeconomic design in which delaying cross-shard transaction processing is punished. An additional advantage of the reliable messaging protocol is that it simplifies the cross-linking of shards.
 
 It was created as a graduation project to create a reliable messaging protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
 
-## Compiling the ReliableTX source code
+## Compiling the Guaranteed-TX source code
 The graphic interface provides some features to modify the simulation, however, many more variables can be modified in the source code. 
 
 For building the ReliableTX Simulator the source code needs to be available on the build system and Golang version >1.4+. ReliableTX uses Go bindings for nuklear.h — a small ANSI C gui library and requires a GNU Compiler Collection to build nuklear. Windows users can use MinGW. An extended installation description for nuklear can be found in the [Nuklear Go binding](https://github.com/golang-ui/nuklear) repository.
 
 Subsequently, one can compile the code with `go build`.
 
-## About ReliableTX
-ReliableTX is a reliable messaging protocol for Ethereum 2.0. The idea behind the protocol is the followin: a validator ```v``` that is part of the validator committee of shard ```s``` acts as a full node for shard ```s``` and as a light client for all other shards.  With ReliableTX, two extra fields are added to each block header; a ```txIn``` field and a ```txOut``` field.  
+## About Guaranteed-TX
+Guaranteed-TX is a guaranteed cross-shard transaction execution protocol for Ethereum 2.0. Guaranteed-TX allows shards to process cross-shard transactions before being finalised in the block it was created - a property called optimistic execution - which significantly improves cross-shard transaction latencies. In addition, it provides economic guarantees that all cross-shard transaction will eventually be processed. In order to achieve both Guaranteed-TX intro- duces a messaging layer which records the created and processed cross-shard transactions and is shared with every shard. The messaging layer is used to finalise consistent blocks and punish valida- tors in a shard committee for not processing cross-shard transactions. Consequently, cross-shard transactions are either processed or slowly drain the stake of the validators within the addressed shard.
 
-The ```txOut``` field maintains the list of all generated receipts hashes for that specific block including a prefix of the destination shard. The ```txIn``` maintains  the list of processed receipts of that particular shard. A processed receipt therefore has a entry in the ```txOut``` list on the source shard and a ```txIn``` in the destination shard.
-
-In addition, every beacon block that cross-links shard blocks at epoch checkpoints includes a list of all `inconsistent` cross-shard transactions, i.e. a receipt which is not processed at the target shard (alternatively an merkletree root of these transactions could be used). Each cross-link acts as a heartbeat. If a receipt is not processed within `x` heartbeats, both the target shard as source shard committee validators will be punished. This way, we economically garuantee reliable transactions. A finalisation, i.e. cross-linking block also allows to prune every blockheader of the non-validating shards. 
-
-Moreover, instead of waiting epoch (6.4 minutes) before a receipt can be processed on the target shard, one can 
-use the bock headers of each shard and an extended fork-choice rule of to invalidate and validate inconsistent blocks. This way, one can minimalise the waiting time to include cross-shard transactions without risking inconsistencies.
-
+More information about Guaranteed-TX can be find here.
 
 ## Using the simulator
-The simulator simulates an abstracted version of above protocol. For every shard the block headers are plotted as circles over time. The color of the circle indicates the status and the lines between circles a parent-child relation, with the parent always on earlier in time on the left side. Clicking on a circle shows the `txOut` and  `txIn`  transaction list of the related block header. Moreover, the beacon chain finalised blocks in the background.
+The simulator simulates an abstracted version of above protocol. For every shard the block headers are plotted as circles over time. The color of the circle indicates the status and the lines between circles a parent-child relation, with the parent always on earlier in time on the left side. Clicking on a circle shows the `txOut` and  `txIn`  transaction list of the related block header. Moreover, the beacon chain finalises blocks in the background.
 
 Status colors selected shard (full node):
 * **Green** -> Finalised
@@ -37,14 +31,14 @@ Status colors other shards (light client):
 * **Blue** -> Last finalised block
  
   
-A detailed description about the visualiser can be found in my thesis document: ReliableTX
+A detailed description about the visualiser can be found in my thesis document.
 
 
-IMPORTANT: The simulator is used to get insights in ReliableTX and is not formally proven. 
+IMPORTANT: The simulator is used to get insights in Guaranteed-TX and is not formally proven. 
 
 
 ## Gallery
 
-![screenshot](https://raw.githubusercontent.com/sjoerdwels/ReliableTX/master/assets/demo.gif)
+![screenshot](https://raw.githubusercontent.com/sjoerdwels/Guaranteed-TX/master/assets/demo.gif)
 
-![screenshot2](https://raw.githubusercontent.com/sjoerdwels/ReliableTX/master/assets/demo2.png)
+![screenshot2](https://raw.githubusercontent.com/sjoerdwels/Guaranteed-TX/master/assets/demo2.png)
