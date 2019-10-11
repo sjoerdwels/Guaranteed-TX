@@ -1,19 +1,17 @@
 # Guaranteed-TX Simulator
-The ReliableTX simulator is a graphical interface written in Golang to simulate visualise the working of ReliableTX, a reliable messaging protocol for Ethereum 2.0. ReliableTX is a reliable asynchronous messaging protocol that gives rise to low message overhead and computation costs. The reliable messaging protocol is a cryptoeconomic design in which delaying cross-shard transaction processing is punished. An additional advantage of the reliable messaging protocol is that it simplifies the cross-linking of shards.
+The Guaranteed-TX simulator is a graphical interface written in Golang to simulate visualise the working of Guaranteed-TX, a  guaranteed cross-shard transaction execution protocol for Ethereum 2.0.
 
-It was created as a graduation project to create a reliable messaging protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
+It was created as a graduation project to create a guaranteed cross-shard transaction execution protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
 
 ## Compiling the Guaranteed-TX source code
 The graphic interface provides some features to modify the simulation, however, many more variables can be modified in the source code. 
 
-For building the ReliableTX Simulator the source code needs to be available on the build system and Golang version >1.4+. ReliableTX uses Go bindings for nuklear.h — a small ANSI C gui library and requires a GNU Compiler Collection to build nuklear. Windows users can use MinGW. An extended installation description for nuklear can be found in the [Nuklear Go binding](https://github.com/golang-ui/nuklear) repository.
+For building the Guaranteed-TX Simulator the source code needs to be available on the build system and Golang version >1.4+. Guaranteed-TX  uses Go bindings for nuklear.h — a small ANSI C gui library and requires a GNU Compiler Collection to build nuklear. Windows users can use MinGW. An extended installation description for nuklear can be found in the [Nuklear Go binding](https://github.com/golang-ui/nuklear) repository.
 
 Subsequently, one can compile the code with `go build`.
 
 ## About Guaranteed-TX
 Guaranteed-TX is a guaranteed cross-shard transaction execution protocol for Ethereum 2.0. Guaranteed-TX allows shards to process cross-shard transactions before being finalised in the block it was created - a property called optimistic execution - which significantly improves cross-shard transaction latencies. In addition, it provides economic guarantees that all cross-shard transaction will eventually be processed. In order to achieve both Guaranteed-TX intro- duces a messaging layer which records the created and processed cross-shard transactions and is shared with every shard. The messaging layer is used to finalise consistent blocks and punish valida- tors in a shard committee for not processing cross-shard transactions. Consequently, cross-shard transactions are either processed or slowly drain the stake of the validators within the addressed shard.
-
-More information about Guaranteed-TX can be find here.
 
 ## Using the simulator
 The simulator simulates an abstracted version of above protocol. For every shard the block headers are plotted as circles over time. The color of the circle indicates the status and the lines between circles a parent-child relation, with the parent always on earlier in time on the left side. Clicking on a circle shows the `txOut` and  `txIn`  transaction list of the related block header. Moreover, the beacon chain finalises blocks in the background.
