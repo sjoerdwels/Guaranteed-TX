@@ -1,7 +1,5 @@
 # Guaranteed-TX Simulator
-The Guaranteed-TX simulator is a graphical interface written in Golang to simulate visualise the working of Guaranteed-TX, a  guaranteed cross-shard transaction execution protocol for Ethereum 2.0.
-
-It was created as a graduation project to create a guaranteed cross-shard transaction execution protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
+The Guaranteed-TX simulator is a graphical interface written in Golang to simulate visualise the working of Guaranteed-TX.It was created as a graduation project to create a guaranteed cross-shard transaction execution protocol for [Ethereum 2.0](https://github.com/ethereum/eth2.0-specs).
 
 ## Compiling the Guaranteed-TX source code
 The graphic interface provides some features to modify the simulation, however, many more variables can be modified in the source code. 
